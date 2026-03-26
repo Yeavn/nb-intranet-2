@@ -51,7 +51,7 @@ export default function EditDialog({DateId, date, location, start_time, end_time
                 id: DateId,
             })
         })
-        alert("Termin wurde gelöscht. Zum anzeigen, lade die Seite neu!")
+        window.location.reload()
     }
 
     return(
