@@ -25,7 +25,6 @@ export async function POST(req: Request) {
                         {
                             httpOnly: true,
                             sameSite: "strict",
-                            maxAge: 60 * 60, // 1 Stunde
                             path: "/",
                         }
                     );
@@ -37,7 +36,6 @@ export async function POST(req: Request) {
                     {
                         httpOnly: true,
                         sameSite: "strict",
-                        maxAge: 60 * 60, // 1 Stunde
                         path: "/",
                     }
                 )
