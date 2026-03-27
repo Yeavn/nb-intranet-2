@@ -6,6 +6,10 @@ import { Settings } from "lucide-react"
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { stringify } from "node:querystring";
+import { IoMdClose } from "react-icons/io";
 
 export default function SettingDialog() {
 
@@ -14,6 +18,7 @@ export default function SettingDialog() {
     const [vocalGroup, setVocalGroup] = useState("")
     const [fullName, setFullName] = useState("")
     const [perms, setPerms] = useState(JSON)
+    const [photos, setPhotos] = useState(Boolean)
 
     const [password, setPassword] = useState("")
 
@@ -51,6 +56,7 @@ export default function SettingDialog() {
         setVocalGroup(json[0].vocal_group)
         setFullName(json[0].full_name)
         setPerms(json[0].perms)
+        setPhotos(json[0].photos)
     }
 
     async function updatePassword() {
@@ -76,6 +82,20 @@ export default function SettingDialog() {
         window.location.reload()
     }
 
+    async function updatePhotos(status: boolean) {
+        const res = await fetch(`/api/updatePhotos`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: id,
+                status: status
+            })
+        })
+        setPhotos(status)
+    }
+
 
     return(
         <Dialog>
@@ -86,6 +106,21 @@ export default function SettingDialog() {
                     <DialogDescription>Benutzername: {username}</DialogDescription>
                     <DialogDescription>Stimmgruppe: {vocalGroup}</DialogDescription>
                 </DialogHeader>
+                <div>
+                    <Item variant="outline">
+                        <ItemContent>
+                            <ItemTitle>Fotoerlaubnis</ItemTitle>
+                            <p>Für unsere Instagram-Seite benötigen wir deine Erlaubnis Fotos/Videos von dir zu machen und zu veröffentlichen.</p>
+                            <p className="mt-6">Aktueller Status: {photos ? "Zugelassen" : "Abgelehnt"}</p>
+                        </ItemContent>
+                        <ItemActions>
+                            <div className="flex gap-2">
+                                <Button variant="secondary" onClick={() => updatePhotos(true)}><FaCheck /></Button>
+                                <Button variant="destructive" onClick={() => updatePhotos(false)}><IoMdClose /></Button>
+                            </div>
+                        </ItemActions>
+                    </Item>
+                </div>
                 <div className="flex gap-2 flex-col">
                     <Label htmlFor="passwort">Neues Passwort</Label>
                     <Input id="passwort" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />

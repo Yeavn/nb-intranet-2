@@ -12,6 +12,7 @@ import { Menu, Settings } from "lucide-react"
 import { useEffect, useState } from "react"
 import { FaCamera } from "react-icons/fa6"
 import SettingDialog from "./SettingDialog"
+import PhotoDialog from "./PhotoDialog"
 
 type NavbarProps = {
     onSelect: (value: string) => void
@@ -64,7 +65,7 @@ export default function NavHeader({onSelect}: NavbarProps) {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        {perms ? <Button variant="ghost"><FaCamera /></Button> : ""}
+        {perms ? <PhotoDialog /> : ""}
       </div>
 
       <Button
