@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
@@ -18,6 +19,7 @@ export default function CreateDialog({ project } : Props) {
     const [startTime, setStartTime] = useState("")
     const [endTime, setEndTime] = useState("")
     const [kategorie, setKategorie] = useState("")
+    const [informationen, setInformationen] = useState("")
 
     async function editEvent() {
         const res = await fetch(`/api/createDate`, {
@@ -31,7 +33,8 @@ export default function CreateDialog({ project } : Props) {
                 start_time: startTime,
                 end_time: endTime,
                 location: ort,
-                project: project
+                project: project,
+                informations: informationen
             })
         })
         window.location.reload()
@@ -80,6 +83,14 @@ export default function CreateDialog({ project } : Props) {
                                 value={endTime}
                             />
                         </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="infos">Zusatzinfos</Label>
+                        <Textarea
+                            id="infos" 
+                            onChange={(e) => setInformationen(e.target.value)}
+                            value={informationen}
+                        />
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="location">Ort</Label>

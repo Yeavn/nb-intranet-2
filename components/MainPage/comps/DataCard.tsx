@@ -39,9 +39,11 @@ type Props = {
     end_time: string;
     category: string;
     singers: Singer[];
+    informations: string;
+    deadline: Date;
 }
 
-export default function DateCard({ DateId, date, project, location, start_time, end_time, category, singers }: Props) {
+export default function DateCard({ DateId, date, project, location, start_time, end_time, category, singers, informations, deadline }: Props) {
     const [formattedDate, setFormattedDate] = useState("");
     const [status, setStatus] = useState("");
     const [id, setID] = useState<number | null>(null);
@@ -52,12 +54,16 @@ export default function DateCard({ DateId, date, project, location, start_time, 
     const [cancelled, setCancelled] = useState<{ name: string; vocal_group: string }[]>([])
     const [open, setOpen] = useState<{ name: string; vocal_group: string }[]>([])
 
+    const heute = new Date();
+
     useEffect(() => {
         setFormattedDate(date.toLocaleDateString());
     }, [date]);
 
     useEffect(() => {
         getID();
+        console.log(deadline != null)
+        console.log(heute)
     }, [])
 
     useEffect(() => {
@@ -163,6 +169,7 @@ export default function DateCard({ DateId, date, project, location, start_time, 
         setMembers(await json)
     }
 
+
     return(
         <Item variant="outline">
             <ItemContent>
@@ -173,16 +180,25 @@ export default function DateCard({ DateId, date, project, location, start_time, 
             </ItemContent>
             <ItemActions className="flex flex-col">
                 <div className="flex gap-2">
-                    <Button variant="secondary" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
-                    <Button variant="destructive" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>
+                    { deadline == null || deadline > heute ?
+                    status == "Offen" ? <>
+                    <Button variant="outline" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
+                    <Button variant="outline" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>
+                    </> : status == "Zugesagt" ?
+                    <Button variant="outline" onClick={() => updateStatus("Abgesagt")}>Absagen</Button>
+                    : 
+                    <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
+                    : ""
+                    }
                 </div>
-                {perms ? <EditDialog DateId={DateId} date={date} location={location} start_time={start_time} end_time={end_time} category={category} /> : ""}
+                {perms ? <EditDialog DateId={DateId} date={date} location={location} start_time={start_time} end_time={end_time} category={category} informations={informations} /> : ""}
                 <Dialog>
                     <DialogTrigger render={<Button variant="outline" onClick={() => sortMembers()}><IoInformationCircleOutline />Details</Button>} />
                     <DialogContent className="sm:max-w-xl sm:max-h-[90vh] max-h-[70vh] overflow-auto no-scrollbar">
                         <DialogHeader>
                             <DialogTitle>{category}</DialogTitle>
                             <DialogDescription>{start_time} - {end_time}</DialogDescription>
+                            <DialogDescription>{informations}</DialogDescription>
                         </DialogHeader>
                         <div className="flex flex-col gap-4">
                                 <h1 className="font-bold">Zugesagt</h1>

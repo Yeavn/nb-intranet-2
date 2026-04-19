@@ -11,6 +11,6 @@ export async function POST(req: Request) {
     const supabase = await createClient();
     const body = await req.json();
     const { id } = body;
-    const {data: users, error} = await supabase.from('users').select().eq("id", id);
+    const {data: users, error} = await supabase.from('users').select().eq("id", id).order("full_name", { ascending: false });
     return NextResponse.json(users, {status: 200})
 }

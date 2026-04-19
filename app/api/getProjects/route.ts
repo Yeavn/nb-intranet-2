@@ -9,7 +9,7 @@ export async function GET() {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
     const supabase = await createClient()
-    const { data: projectData } = await supabase.from("projects").select();
+    const { data: projectData } = await supabase.from("projects").select().order('name', { ascending: true })
 
     return NextResponse.json(projectData, {status: 200})
 }

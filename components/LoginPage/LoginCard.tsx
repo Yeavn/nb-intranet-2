@@ -56,6 +56,7 @@ export default function LoginCard() {
                   placeholder="max_mustermann"
                   required
                   onChange={(e) => setUsername(e.target.value)}
+                  value={username}
                 />
               </div>
               <div className="grid gap-2">
@@ -66,7 +67,10 @@ export default function LoginCard() {
                   id="password" 
                   type="password" 
                   required
-                  onChange={(e) => setPassword(e.target.value)} />
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                   />
+                  
               </div>
             </div>
         </CardContent>

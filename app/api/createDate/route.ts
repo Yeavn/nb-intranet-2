@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const supabase = await createClient();
     const body = await req.json()
-    const { category, date, start_time, end_time, location, project} = body
+    const { category, date, start_time, end_time, location, project, informations} = body
     const { error } = await supabase
         .from("dates")
         .insert({
@@ -22,6 +22,7 @@ export async function POST(req: Request) {
             end_time: end_time,
             location: location,
             project: project,
+            informations: informations,
             members: []
         })
 

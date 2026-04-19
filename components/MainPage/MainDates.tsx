@@ -5,6 +5,7 @@ import NavHeader from "./comps/Nav-Header";
 import { Suspense } from "react";
 import DateCard from "./comps/DataCard";
 import CreateDialog from "./comps/CreateDialog";
+import moment from "moment";
 
 export default function MainDates() {
     const [title, setTitle] = useState<string>("")
@@ -12,6 +13,7 @@ export default function MainDates() {
     const [dates, setDates] = useState<any[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [project, setProject] = useState("")
+    const [deadline, setDeadline] = useState<Date>(new Date)
 
     const [perms, setPerms] = useState(Boolean)
 
@@ -30,6 +32,7 @@ export default function MainDates() {
                 if(data[i].name === proj) {
                     setTitle(data[i].full_name)
                     setTopic(data[i].topic)
+                    setDeadline(data[i].deadline)
                     const res = await fetch(`/api/getDates`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json"},
@@ -63,6 +66,7 @@ export default function MainDates() {
                 <div className="w-full min-h-screen p-4">
                     <h1 className="font-bold text-xl">{title}</h1>
                     <h2 className="text-md mb-6">{topic}</h2>
+                    <h2 className="text-md font-bold mb-6 text-red-400">Deadline: {deadline != null ? moment(deadline).format("DD.MM.YYYY") : "akutell keine Deadline"}</h2>
                     {perms ? <CreateDialog project={project} /> : ""}
                     <div className="mt-12 w-full flex flex-col gap-8">
                         {loading ? (
@@ -73,12 +77,14 @@ export default function MainDates() {
                                     key={idx}
                                     DateId = {date.id}
                                     date={new Date(date.date)}
+                                    deadline={deadline}
                                     project={date.project}
                                     location={date.location}
                                     start_time={date.start_time}
                                     end_time={date.end_time}
                                     category={date.category}
                                     singers={date.members}
+                                    informations={date.informations}
                                 />
                             ))
                         )}

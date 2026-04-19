@@ -116,7 +116,7 @@ export default function SettingDialog() {
                         <ItemActions>
                             <div className="flex gap-2">
                                 <Button variant="secondary" onClick={() => updatePhotos(true)}><FaCheck /></Button>
-                                <Button variant="destructive" onClick={() => updatePhotos(false)}><IoMdClose /></Button>
+                                <Button variant="secondary" onClick={() => updatePhotos(false)}><IoMdClose /></Button>
                             </div>
                         </ItemActions>
                     </Item>

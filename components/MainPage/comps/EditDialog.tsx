@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { FaCheck, FaTrash } from "react-icons/fa6";
 import { RiPencilFill } from "react-icons/ri";
@@ -13,15 +14,17 @@ type Props = {
     start_time: string;
     end_time: string;
     category: string;
+    informations: string
 }
 
-export default function EditDialog({DateId, date, location, start_time, end_time, category}: Props) {
+export default function EditDialog({DateId, date, location, start_time, end_time, category, informations}: Props) {
 
     const [datum, setDatum] = useState(date.toISOString().slice(0, 10))
     const [ort, setOrt] = useState(location)
     const [startTime, setStartTime] = useState(start_time)
     const [endTime, setEndTime] = useState(end_time)
     const [kategorie, setKategorie] = useState(category)
+    const [informationen, setInformationen] = useState(informations)
 
     async function editEvent() {
         const res = await fetch(`/api/updateDate`, {
@@ -36,6 +39,7 @@ export default function EditDialog({DateId, date, location, start_time, end_time
                 end_time: endTime,
                 location: ort,
                 id: DateId,
+                informations: informationen
             })
         })
         window.location.reload()
@@ -97,6 +101,14 @@ export default function EditDialog({DateId, date, location, start_time, end_time
                                 value={endTime}
                             />
                         </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="infos">Zusatzinfos</Label>
+                        <Textarea
+                            id="infos" 
+                            onChange={(e) => setInformationen(e.target.value)}
+                            value={informationen}
+                        />
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="location">Ort</Label>

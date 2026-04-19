@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const supabase = await createClient();
     const body = await req.json()
-    const { category, date, start_time, end_time, location, id} = body
+    const { category, date, start_time, end_time, location, id, informations} = body
     await supabase
         .from("dates")
         .update({
@@ -20,7 +20,8 @@ export async function POST(req: Request) {
             date: date,
             start_time: start_time,
             end_time: end_time,
-            location: location
+            location: location,
+            informations: informations
         })
         .eq("id", id);
 
