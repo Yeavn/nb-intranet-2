@@ -121,12 +121,11 @@ export default function SettingDialog() {
                         </ItemActions>
                     </Item>
                 </div>
-                {/*
                 <div className="flex gap-2 flex-col">
                     <Label htmlFor="passwort">Neues Passwort</Label>
                     <Input id="passwort" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <Button type="submit" onClick={updatePassword}><FaCheck />Bestätigen</Button>
-                </div> */}
+                </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={handeLogout}><IoLogOut />Ausloggen</Button>
                 </DialogFooter>

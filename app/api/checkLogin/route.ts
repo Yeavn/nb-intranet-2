@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     if (userData) {
         for(let i=0; i < userData.length; i++) {
-            if(userData[i].username === username && await bcrypt.compare(password, userData[0].password)){
+            if(userData[i].username === username && await bcrypt.compare(password, userData[i].password)){
                 const cookieStore = await cookies();
                 if (token) {
                     cookieStore.set(

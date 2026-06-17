@@ -21,6 +21,7 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import EditDialog from "./EditDialog";
+import moment, { Moment } from "moment";
 
 
 type Singer = {
@@ -40,7 +41,7 @@ type Props = {
     category: string;
     singers: Singer[];
     informations: string;
-    deadline: Date;
+    deadline: Moment | Date | string | null;
 }
 
 export default function DateCard({ DateId, date, project, location, start_time, end_time, category, singers, informations, deadline }: Props) {
@@ -54,7 +55,8 @@ export default function DateCard({ DateId, date, project, location, start_time, 
     const [cancelled, setCancelled] = useState<{ name: string; vocal_group: string }[]>([])
     const [open, setOpen] = useState<{ name: string; vocal_group: string }[]>([])
 
-    const heute = new Date();
+    const heute = moment(new Date())
+    const deadlineMoment = deadline ? moment(deadline) : null
 
     useEffect(() => {
         setFormattedDate(date.toLocaleDateString());
@@ -62,8 +64,8 @@ export default function DateCard({ DateId, date, project, location, start_time, 
 
     useEffect(() => {
         getID();
-        console.log(deadline != null)
-        console.log(heute)
+        console.log("Deadline" + deadline)
+        console.log("heute" + moment(heute))
     }, [])
 
     useEffect(() => {
@@ -180,7 +182,7 @@ export default function DateCard({ DateId, date, project, location, start_time, 
             </ItemContent>
             <ItemActions className="flex flex-col">
                 <div className="flex gap-2">
-                    { deadline == null || deadline > heute ?
+                    { deadlineMoment == null || deadlineMoment.isAfter(heute) ?
                     status == "Offen" ? <>
                     <Button variant="outline" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
                     <Button variant="outline" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>
