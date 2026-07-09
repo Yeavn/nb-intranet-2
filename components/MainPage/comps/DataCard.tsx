@@ -49,6 +49,7 @@ export default function DateCard({ DateId, date, project, location, start_time, 
     const [status, setStatus] = useState("");
     const [id, setID] = useState<number | null>(null);
     const [perms, setPerms] = useState(Boolean)
+    const [sondererlaubnis, setSondererlaubnis] = useState(Boolean)
     const [members, setMembers] = useState(singers)
 
     const [promised, setPromised] = useState<{ name: string; vocal_group: string }[]>([])
@@ -88,6 +89,9 @@ export default function DateCard({ DateId, date, project, location, start_time, 
         const json = await res.json()
         if(json.data[0].permissions.terminplanung) {
             setPerms(true)
+        }
+        if(json.data[0].permissions.sondereintragung) {
+            setSondererlaubnis(true)
         }
     }
 
@@ -182,7 +186,7 @@ export default function DateCard({ DateId, date, project, location, start_time, 
             </ItemContent>
             <ItemActions className="flex flex-col">
                 <div className="flex gap-2">
-                    { deadlineMoment == null || deadlineMoment.isAfter(heute) ?
+                    { deadlineMoment == null || deadlineMoment.isAfter(heute) || sondererlaubnis ?
                     status == "Offen" ? <>
                     <Button variant="outline" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
                     <Button variant="outline" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>

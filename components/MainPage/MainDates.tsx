@@ -77,7 +77,7 @@ export default function MainDates() {
                                     key={idx}
                                     DateId = {date.id}
                                     date={new Date(date.date)}
-                                    deadline={deadline}
+                                    deadline={moment(deadline)}
                                     project={date.project}
                                     location={date.location}
                                     start_time={date.start_time}
