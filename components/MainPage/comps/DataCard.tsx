@@ -186,16 +186,20 @@ export default function DateCard({ DateId, date, project, location, start_time, 
             </ItemContent>
             <ItemActions className="flex flex-col">
                 <div className="flex gap-2">
-                    { deadlineMoment == null || deadlineMoment.isAfter(heute) || sondererlaubnis ?
-                    status == "Offen" ? <>
-                    <Button variant="outline" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
-                    <Button variant="outline" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>
-                    </> : status == "Zugesagt" ?
-                    <Button variant="outline" onClick={() => updateStatus("Abgesagt")}>Absagen</Button>
-                    : 
-                    <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
-                    : ""
-                    }
+                    {(deadlineMoment == null || !deadlineMoment.isValid() || deadlineMoment.isAfter(heute) || sondererlaubnis) ? (
+                        status === "Offen" ? (
+                            <>
+                                <Button variant="outline" onClick={() => updateStatus("Zugesagt")}><FaCheck /></Button>
+                                <Button variant="outline" onClick={() => updateStatus("Abgesagt")}><IoMdClose /></Button>
+                            </>
+                        ) : status === "Zugesagt" ? (
+                            <Button variant="outline" onClick={() => updateStatus("Abgesagt")}>Absagen</Button>
+                        ) : status === "Abgesagt" ? (
+                            <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
+                        ) : null
+                    ) : status === "Abgesagt" ? (
+                        <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
+                    ) : null}
                 </div>
                 {perms ? <EditDialog DateId={DateId} date={date} location={location} start_time={start_time} end_time={end_time} category={category} informations={informations} /> : ""}
                 <Dialog>

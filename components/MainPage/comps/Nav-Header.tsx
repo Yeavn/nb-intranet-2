@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Button } from "@/components/ui/button"
-import { Menu, Settings } from "lucide-react"
+import { Cloud, Menu, Settings } from "lucide-react"
 import { useEffect, useState } from "react"
 import { FaCamera } from "react-icons/fa6"
 import SettingDialog from "./SettingDialog"
@@ -66,6 +66,7 @@ export default function NavHeader({onSelect}: NavbarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
         {perms ? <PhotoDialog /> : ""}
+        <Button variant="outline" onClick={() => window.open("https://drive.google.com/drive/u/0/folders/1UCchfRiwpIeTeGL7OmsddkcMLO16tEVi")}><Cloud /></Button>
       </div>
 
       <Button
