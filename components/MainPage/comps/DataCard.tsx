@@ -161,18 +161,21 @@ export default function DateCard({ DateId, date, project, location, start_time, 
     }
 
     async function updateStatus(status: string) {
-        const res = fetch(`/api/updateUserDate`, {
+        const res = await fetch(`/api/updateUserDate`, {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({
                 DateId: DateId,
-                UserId: id,
                 status: status
             })
         })
+        const json = await res.json()
+        if (!res.ok) {
+            alert(json.error ?? "Status konnte nicht geändert werden.")
+            return
+        }
         setStatus(status)
-        const json = (await res).json();
-        setMembers(await json)
+        setMembers(json)
     }
 
 

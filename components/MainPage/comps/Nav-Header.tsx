@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Button } from "@/components/ui/button"
-import { Cloud, Menu, Settings } from "lucide-react"
+import { Cloud, Menu, Settings, ShieldUser } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { FaCamera } from "react-icons/fa6"
 import SettingDialog from "./SettingDialog"
 import PhotoDialog from "./PhotoDialog"
@@ -22,6 +23,8 @@ export default function NavHeader({onSelect}: NavbarProps) {
 
     const [data, setData] = useState<any[]>([])
     const [perms, setPerms] = useState(Boolean)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -42,6 +45,9 @@ export default function NavHeader({onSelect}: NavbarProps) {
         const json = await res.json()
         if(json.data[0].permissions.fotoerlaubnis) {
             setPerms(true)
+        }
+        if(json.data[0].permissions.admin) {
+            setIsAdmin(true)
         }
     }
 
@@ -67,6 +73,7 @@ export default function NavHeader({onSelect}: NavbarProps) {
         </DropdownMenu>
         {perms ? <PhotoDialog /> : ""}
         <Button variant="outline" onClick={() => window.open("https://drive.google.com/drive/u/0/folders/1UCchfRiwpIeTeGL7OmsddkcMLO16tEVi")}><Cloud /></Button>
+        {isAdmin ? <Button variant="outline" onClick={() => router.push("/admin")}><ShieldUser />Admin</Button> : ""}
       </div>
 
       <Button

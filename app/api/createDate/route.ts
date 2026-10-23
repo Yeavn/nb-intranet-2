@@ -1,13 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-import { checkAuth } from "@/lib/auth/checkAuth";
+import { checkPermission } from "@/lib/auth/checkPermission";
 
 export async function POST(req: Request) {
 
-    const auth = await checkAuth();
+    // Nur mit Berechtigung "terminplanung"
+    const userId = await checkPermission("terminplanung");
 
-    if (!auth) {
-        return NextResponse.json("Nicht autorisiert!", {status: 401})
+    if (userId === null) {
+        return NextResponse.json("Keine Berechtigung!", {status: 403})
     }
 
     const supabase = await createClient();

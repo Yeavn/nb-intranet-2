@@ -1,36 +1,23 @@
 import LoginCard from "@/components/LoginPage/LoginCard"
 import MainDates from "@/components/MainPage/MainDates";
-
-import { cookies } from "next/headers"
+import { checkAuth } from "@/lib/auth/checkAuth";
 
 export default async function Page() {
 
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('auth_token')
-  if (authToken){
-    if(authToken.value === process.env.SECRET_TOKEN) {
-      return (
-        <>
-          <MainDates />
-        </>
-      )
-    } else {
-      return (
-        <>
-          <div className="flex min-h-screen items-center justify-center">
-            <LoginCard />
-          </div>
-        </>
-      )
-    }
-  } else {
+  const auth = await checkAuth();
+  if (auth) {
     return (
-        <>
-          <div className="flex min-h-screen items-center justify-center">
-            <LoginCard />
-          </div>
-        </>
-      )
+      <>
+        <MainDates />
+      </>
+    )
   }
 
+  return (
+    <>
+      <div className="flex min-h-screen items-center justify-center">
+        <LoginCard />
+      </div>
+    </>
+  )
 }

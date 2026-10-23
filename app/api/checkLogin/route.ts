@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server";
+import { createSessionValue, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/auth/session";
 
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
@@ -10,45 +11,32 @@ import bcrypt from "bcrypt"
 export async function POST(req: Request) {
     const body = await req.json()
     const { username, password } = body
-    const token = process.env.SECRET_TOKEN
 
     const supabase = await createClient();
     const { data: userData } = await supabase.from("users").select().eq("username", username);
-
-    if (userData && userData.length > 0) {
-        console.log(await bcrypt.compare(password, userData[0].password))
-    }
 
     if (userData) {
         for(let i=0; i < userData.length; i++) {
             if(userData[i].username === username && await bcrypt.compare(password, userData[i].password)){
                 const cookieStore = await cookies();
-                if (token) {
-                    cookieStore.set(
-                        "auth_token",
-                        token,
-                        {
-                            httpOnly: true,
-                            sameSite: "strict",
-                            path: "/",
-                        }
-                    );
-                }
 
                 cookieStore.set(
-                    "userid", 
-                    userData[i].id,
+                    SESSION_COOKIE,
+                    createSessionValue(userData[i].id),
                     {
                         httpOnly: true,
                         sameSite: "strict",
+                        secure: process.env.NODE_ENV === "production",
                         path: "/",
+                        maxAge: SESSION_MAX_AGE,
                     }
                 )
+                // Altes, unsigniertes Login-Cookie aufräumen
+                cookieStore.delete("auth_token")
                 return NextResponse.json({status: 200})
             }
-            
-        }
-        return NextResponse.json({error: "Falsche Anmeldedaten"}, {status: 404})
-    }
-}
 
+        }
+    }
+    return NextResponse.json({error: "Falsche Anmeldedaten"}, {status: 404})
+}
