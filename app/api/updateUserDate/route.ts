@@ -1,6 +1,6 @@
 import { getSessionPermissions } from "@/lib/auth/checkPermission";
 import { canChangeStatus } from "@/lib/dates/deadline";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 const ALLOWED_STATUS = ["Zugesagt", "Abgesagt"]
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     }
     const UserId = session.id
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const body = await req.json()
     const { DateId, status } = body
 

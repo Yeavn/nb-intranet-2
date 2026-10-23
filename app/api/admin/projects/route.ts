@@ -1,5 +1,5 @@
 import { checkAdmin } from "@/lib/auth/checkAdmin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 function readProjectFields(body: Record<string, unknown>) {
@@ -18,7 +18,7 @@ export async function GET() {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase.from("projects").select().order("name", { ascending: true })
     if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const name = String(body.name ?? "").trim()
     const fields = readProjectFields(body)
@@ -61,7 +61,7 @@ export async function PATCH(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const fields = readProjectFields(body)
 
@@ -84,7 +84,7 @@ export async function DELETE(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
 
     const { data: project } = await supabase.from("projects").select("name").eq("id", body.id).maybeSingle()

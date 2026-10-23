@@ -1,5 +1,5 @@
 import { getSessionUserId } from "@/lib/auth/session";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 import bcrypt from "bcrypt"
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const password = typeof body.password === "string" ? body.password : ""
 

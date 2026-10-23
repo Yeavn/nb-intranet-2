@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { PermissionKey, Permissions } from "./permissions";
 import { getSessionUserId } from "./session";
 
@@ -9,7 +9,7 @@ export async function getSessionPermissions(): Promise<{ id: number; permissions
         return null
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data } = await supabase.from("users").select("permissions").eq("id", id).maybeSingle()
     if (!data) {
         return null

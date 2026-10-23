@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createSessionValue, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/auth/session";
 
 import { cookies } from "next/headers"
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const body = await req.json()
     const { username, password } = body
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data: userData } = await supabase.from("users").select().eq("username", username);
 
     if (userData) {

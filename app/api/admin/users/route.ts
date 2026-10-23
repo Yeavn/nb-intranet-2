@@ -1,6 +1,6 @@
 import { checkAdmin } from "@/lib/auth/checkAdmin";
 import { DEFAULT_PASSWORD, sanitizePermissions } from "@/lib/auth/permissions";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 import bcrypt from "bcrypt"
@@ -14,7 +14,7 @@ export async function GET() {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data, error } = await supabase.from("users").select(USER_FIELDS).order("full_name", { ascending: true })
     if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const username = String(body.username ?? "").trim()
     const full_name = String(body.full_name ?? "").trim()
@@ -69,7 +69,7 @@ export async function PATCH(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const id = Number(body.id)
     const username = String(body.username ?? "").trim()
@@ -114,7 +114,7 @@ export async function DELETE(req: Request) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const id = Number(body.id)
 

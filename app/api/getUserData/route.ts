@@ -1,5 +1,5 @@
 import { getSessionUserId } from "@/lib/auth/session";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 // Liefert nur die Daten des eingeloggten Benutzers (ohne Passwort-Hash)
@@ -9,7 +9,7 @@ export async function POST() {
     if (id === null) {
         return NextResponse.json("Nicht autorisiert!", {status: 401})
     }
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const { data: users } = await supabase
         .from('users')
         .select("id, username, full_name, vocal_group, photos, permissions")

@@ -1,5 +1,5 @@
 import { checkPermission } from "@/lib/auth/checkPermission";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         return NextResponse.json("Keine Berechtigung!", {status: 403})
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const body = await req.json()
     const { category, date, start_time, end_time, location, id, informations} = body
     await supabase
