@@ -23,10 +23,13 @@ type StatusChange = {
     now?: Date;
 }
 
-// Nach der Deadline darf man nur noch von "Abgesagt" auf "Zugesagt" wechseln,
-// außer man hat die Berechtigung "sondereintragung"
+// Nach der Deadline darf man sich noch erstmals eintragen (Status "Offen")
+// oder von "Abgesagt" auf "Zugesagt" wechseln, außer man hat die Berechtigung "sondereintragung"
 export function canChangeStatus({ deadline, currentStatus, newStatus, sondereintragung, now }: StatusChange) {
     if (sondereintragung || !isDeadlinePassed(deadline, now)) {
+        return true
+    }
+    if (currentStatus === undefined || currentStatus === "Offen") {
         return true
     }
     return currentStatus === "Abgesagt" && newStatus === "Zugesagt"
