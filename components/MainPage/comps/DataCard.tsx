@@ -200,7 +200,7 @@ export default function DateCard({ DateId, date, project, location, start_time, 
                         ) : status === "Abgesagt" ? (
                             <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
                         ) : null
-                    ) : status === "Abgesagt" ? (
+                    ) : status === "Abgesagt" || status === "Offen" ? (
                         <Button variant="outline" onClick={() => updateStatus("Zugesagt")}>Zusagen</Button>
                     ) : null}
                 </div>
